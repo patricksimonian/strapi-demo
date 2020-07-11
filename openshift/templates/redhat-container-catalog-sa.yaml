@@ -1,0 +1,14 @@
+kind: Template
+apiVersion: v1
+objects:
+  - apiVersion: v1
+    stringData:
+      .dockerconfigjson: ${REDHAT_CATALOG_TOKEN}
+    kind: Secret
+    type: kubernetes.io/dockerconfigjson
+    metadata:
+      name: redhat-container-catalog-sa
+parameters:
+- name: REDHAT_CATALOG_TOKEN
+# this can be retreived by creating a redhat container catalog account
+# logging in and generating a service account at https://access.redhat.com/terms-based-registry/#/accounts

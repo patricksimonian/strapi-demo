@@ -25,6 +25,7 @@
       namespace: "{{ tools_namespace }}"
     when: bc.resources|length > 0
     register: build
+    
 
   - name: Setting Facts from Build
     set_fact:

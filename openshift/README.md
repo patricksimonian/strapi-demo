@@ -16,6 +16,8 @@ You can create builds from a PR by running `ansible-playbook ansible/build-react
 
 This will only build for __PRs that are open__. This is to prevent the inadvertent promotion of closed or erroneous PR's.
 
+This will also only trigger a new build if the commit used in the build for that PR does not match the current head commit for the PR. This can be skipped by adding the `-e force_build=true`
+
 By default, this will also only create a `Buildconfig`, however you can trigger a Deployment in the __dev namespace__. To do this run the playbook with `-e deploy=true`
 
 

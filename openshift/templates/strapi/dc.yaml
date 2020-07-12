@@ -60,8 +60,8 @@ objects:
                 - name: DATABASE_URI
                   valueFrom:
                     secretKeyRef:
-                      name: mongodb 
-                      key: mongo-url
+                      name: ${MONGO_SECRET_NAME} 
+                      key: ${MONGO_SECRET_URL_KEY_REF}
               resources: 
                 cpu:
                   requests: ${CPU_REQUEST}
@@ -108,12 +108,11 @@ parameters:
   required: true
   displayName: Image Tag 
   description: the tag for the image to deploy
-- name: DATABASE_SECRET_NAME
+- name: MONGO_SECRET_NAME
   required: true
   displayName: Database Secret Name
   description: The secret name that is uses in the valueFrom in spec.template.spec.containers.env
-  value: mongodb
-- name: DATABASE_SECRET_URL_KEY_REF
+- name: MONGO_SECRET_URL_KEY_REF
   required: true
   displayName: Database Secret Key Reference 
   description: The key that is used as the reference for the mongo url
@@ -122,7 +121,7 @@ parameters:
   required: true
   displayName: name
   description: the name for the dc and container
-  value: digital-strapi
+  value: strapi
 - name: CPU_REQUEST
   value: 50m 
 - name: MEMORY_REQUEST

@@ -5,12 +5,15 @@
       version: "{{ lookup('template', './templates/pr_tag.j2') }}"
       image_namespace: "{{ tools_namespace }}"
       suffix: "{{ version }}"
+      force_build: false
+      should_build: true
     tasks:
       - name: Pre checks
         include: ./tasks/check_pr_exists.yaml
 
       - name: Check if should build 
         include: ./tasks/check_if_should_build.yaml
+        when: not force_build
 
       - debug:
           msg:

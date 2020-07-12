@@ -20,7 +20,7 @@ objects:
         name: node:12.17.0-alpine
       generation: null
       importPolicy: {}
-      name: 12.17.0-alpine
+      name: node:12.17.0-alpine
       referencePolicy:
         type: ""
   status:

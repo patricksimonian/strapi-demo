@@ -1,0 +1,12 @@
+# checks if a user is logged into openshift
+---
+  - name: check logged in
+    command: oc whoami
+    register: user
+
+  - debug: msg="You are not logged into the current cluster. Please login before continuing"
+    when: "'Error from server (Forbidden)' in user.stdout"
+  
+  - name: Ending Play
+    meta: end_play
+    when: "'Error from server (Forbidden)' in user.stdout"

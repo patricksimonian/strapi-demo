@@ -6,8 +6,16 @@ metadata:
     description: "MongoDB database running as replicate set"
     iconClass: "icon-nodejs"
     tags: "nodejs,mongodb,replication,instant-app"
-
 parameters:
+  - name: SUFFIX
+    required: true
+    description: a suffix used in conjunction with NAME to further isolate different instances of these components
+    displayName: suffix
+  - name: PULL_REQUEST_NUMBER
+    default: 0
+    required: false 
+    description: The pull request number associated with this object
+    displayName: Pull Request Number
   - name: MEMORY_REQUEST
     description: Amount of Memory to Request.
     displayName: Memory Request
@@ -46,33 +54,6 @@ parameters:
     value: "mongodb"
     required: true
     
-  - name: MONGODB_USER
-    displayName: "MongoDB Connection Username"
-    description: "Username for MongoDB user that will be used for accessing the database."
-    generate: expression
-    from: "[a-zA-Z0-9]{5}"
-    required: true
-
-  - name: MONGODB_PASSWORD
-    displayName: "MongoDB Connection Password"
-    description: "Password for the MongoDB connection user."
-    generate: expression
-    from: "[a-zA-Z0-9]{16}"
-    required: true
-
-  - name: MONGODB_DATABASE
-    displayName: "MongoDB Database Name"
-    description: "Name of the MongoDB database accessed."
-    value: digitalgovdb
-    required: true
-
-  - name: MONGODB_ADMIN_PASSWORD
-    displayName: "MongoDB Admin Password"
-    description: "Password for the database admin user."
-    generate: expression
-    from: "[a-zA-Z0-9]{16}"
-    required: true
-
   - name: MONGODB_REPLICA_NAME
     displayName: "Replica Set Name"
     description: "The name of the replica set."
@@ -109,29 +90,16 @@ parameters:
     required: true
 
 objects:
-# Secrets for mongo DB 
-  - apiVersion: v1
-    kind: Secret
-    metadata:
-      name: ${MONGODB_SECRET_NAME}
-      labels:
-        name: "${MONGODB_SERVICE_NAME}"
-    stringData:
-      username: "${MONGODB_USER}"
-      password: "${MONGODB_PASSWORD}"
-      admin-username: "admin"
-      admin-password: "${MONGODB_ADMIN_PASSWORD}"
-      database: "${MONGODB_DATABASE}"
-      replica-name: "${MONGODB_REPLICA_NAME}"
-      mongo-url: "mongodb://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_SERVICE_NAME}:27017/${MONGODB_DATABASE}?replicaSet=${MONGODB_REPLICA_NAME}"
-      mongo-oplog-url: "mongodb://admin:${MONGODB_ADMIN_PASSWORD}@${MONGODB_SERVICE_NAME}:27017/local?authSource=admin&replicaSet=${MONGODB_REPLICA_NAME}"
-
   # A non-headless service which takes pod readiness into consideration
   - kind: Service
     apiVersion: v1
     metadata:
       name: "${MONGODB_SERVICE_NAME}"
       labels:
+        app: ${MONGODB_SERVICE_NAME}-${SUFFIX}
+        version: ${PULL_REQUEST_NUMBER}
+        pr: ${PULL_REQUEST_NUMBER}
+        group: ${MONGODB_SERVICE_NAME}
         name: "${MONGODB_SERVICE_NAME}"
     spec:
       ports:
@@ -146,6 +114,10 @@ objects:
     metadata:
       name: "${MONGODB_SERVICE_NAME}-internal"
       labels:
+        app: ${MONGODB_SERVICE_NAME}-${SUFFIX}
+        version: ${PULL_REQUEST_NUMBER}
+        pr: ${PULL_REQUEST_NUMBER}
+        group: ${MONGODB_SERVICE_NAME}
         name: "${MONGODB_SERVICE_NAME}"
       annotations:
         service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
@@ -162,6 +134,11 @@ objects:
     apiVersion: apps/v1beta1
     metadata:
       name: "${MONGODB_SERVICE_NAME}"
+      labels:
+        app: ${MONGODB_SERVICE_NAME}-${SUFFIX}
+        version: ${PULL_REQUEST_NUMBER}
+        pr: ${PULL_REQUEST_NUMBER}
+        group: ${MONGODB_SERVICE_NAME}
     spec:
       serviceName: "${MONGODB_SERVICE_NAME}-internal"
       replicas: "${MONGODB_REPLICAS}"
@@ -169,6 +146,10 @@ objects:
         metadata:
           labels:
             name: "${MONGODB_SERVICE_NAME}"
+            app: ${MONGODB_SERVICE_NAME}-${SUFFIX}
+            version: ${PULL_REQUEST_NUMBER}
+            pr: ${PULL_REQUEST_NUMBER}
+            group: ${MONGODB_SERVICE_NAME}
         spec:
           affinity:
             podAntiAffinity:
@@ -241,6 +222,10 @@ objects:
         - metadata:
             name: mongo-data
             labels:
+              app: ${MONGODB_SERVICE_NAME}-${SUFFIX}
+              version: ${PULL_REQUEST_NUMBER}
+              pr: ${PULL_REQUEST_NUMBER}
+              group: ${MONGODB_SERVICE_NAME}
               name: "${MONGODB_SERVICE_NAME}"
           spec:
             accessModes: [ ReadWriteOnce ]

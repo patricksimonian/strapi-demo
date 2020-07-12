@@ -1,5 +1,5 @@
 ---  
-  - name: deploy {{ react_infra_name }} of PR {{ PR }} in {{ namespace }} namespace
+  - name: deploy {{ strapi_infra_name }} of PR {{ PR }} in {{ namespace }} namespace
     shell: >
       oc process -n "{{ namespace }}" -f "../templates/react-frontend/dc.yaml" {{ deploy_params }} | 
       oc apply -n "{{ namespace }}" -f -
@@ -7,7 +7,7 @@
       IMAGE_TAG: '{{ version }}'
       deploy_params: "{{ lookup('template', './templates/deploy.param.j2') }}"
   - name: Cancel existing rollout
-    shell: oc rollout cancel dc/{{ react_infra_name }}-{{ version }} -n {{ namespace }}
+    shell: oc rollout cancel dc/{{ strapi_infra_name }}-{{ version }} -n {{ namespace }}
   - name: Rolling Out
-    shell: oc rollout latest {{ react_infra_name }}-{{ version }} -n {{ namespace }}
+    shell: oc rollout latest {{ strapi_infra_name }}-{{ version }} -n {{ namespace }}
       

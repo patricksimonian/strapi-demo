@@ -36,7 +36,7 @@
           url: https://api.github.com/repos/bcgov/digital.gov.bc.ca/deployments/{{ deployment.json.id }}/statuses
           method: POST
           body: 
-            description: "Deployment of {{ ref }} is now pending, you can view the logs in detail with oc logs dc/{{ react_infra_name }}-{{ suffix }}"
+            description: "Deployment of {{ ref }} is now pending, you can view the logs in detail with oc logs dc/{{ strapi_infra_name }}-{{ suffix }}"
             state: pending
             environment: "{{ gh_env }}"
           status_code: 201
@@ -49,14 +49,14 @@
         include: ./tasks/wait_for_rollout.yaml
         vars:
           kind: DeploymentConfig
-          name: "{{ react_infra_name }}-{{ suffix }}"
+          name: "{{ strapi_infra_name }}-{{ suffix }}"
 
       - name: "Setting deployment status of deployment {{ deployment.json.id }} to failed"
         uri:
           url: https://api.github.com/repos/bcgov/digital.gov.bc.ca/deployments/{{ deployment.json.id }}/statuses
           method: POST
           body: 
-            description: "Deployment of {{ ref }} has failed, you can view the logs in detail with oc logs dc/{{ react_infra_name }}-{{ suffix }}"
+            description: "Deployment of {{ ref }} has failed, you can view the logs in detail with oc logs dc/{{ strapi_infra_name }}-{{ suffix }}"
             state: failure
             environment: "{{ gh_env }}"
           status_code: 201
@@ -71,10 +71,10 @@
           url: https://api.github.com/repos/bcgov/digital.gov.bc.ca/deployments/{{ deployment.json.id }}/statuses
           method: POST
           body: 
-            description: "Deployment of {{ ref }} is now succeeded, you can view the logs in detail with oc logs dc/{{ react_infra_name }}-{{ suffix }}"
+            description: "Deployment of {{ ref }} is now succeeded, you can view the logs in detail with oc logs dc/{{ strapi_infra_name }}-{{ suffix }}"
             state: success
             environment: "{{ gh_env }}"
-            environment_url: "https://{{ react_infra_name }}-{{ suffix }}-{{ namespace }}.pathfinder.gov.bc.ca"
+            environment_url: "https://{{ strapi_infra_name }}-{{ suffix }}-{{ namespace }}.pathfinder.gov.bc.ca"
           status_code: 201
           body_format: json
           headers:

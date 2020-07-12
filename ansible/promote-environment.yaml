@@ -18,7 +18,7 @@
         name: Check if namespace is valid
 
       - name: check if imagetag exists in tools 
-        shell: oc -n {{ tools_namespace }} get imagestreamtag/{{ react_infra_name }}:{{ IMAGE_TAG }}
+        shell: oc -n {{ tools_namespace }} get imagestreamtag/{{ strapi_infra_name }}:{{ IMAGE_TAG }}
         register: ist
 
       - fail: 
@@ -27,7 +27,7 @@
       
       - name: Retag image to {{ namespace }}
         shell: >
-          oc -n {{ namespace }} tag "{{ tools_namespace }}/{{ react_infra_name }}:{{ IMAGE_TAG }}" {{ react_infra_name }}:{{ new_imagetag }}
+          oc -n {{ namespace }} tag "{{ tools_namespace }}/{{ strapi_infra_name }}:{{ IMAGE_TAG }}" {{ strapi_infra_name }}:{{ new_imagetag }}
 
       - name: Reconfiguring deployment config in environment {{ namespace }}
         include: ./tasks/deploy_react.yaml

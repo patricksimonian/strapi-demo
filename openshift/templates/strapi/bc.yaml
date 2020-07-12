@@ -62,7 +62,7 @@ objects:
       dockerStrategy:
         from:
           kind: ImageStreamTag
-          name: ${NODE_JS_IMAGE_TAG}
+          name: node:12.17.0-alpine
       type: Docker
     successfulBuildsHistoryLimit: 5
     triggers:
@@ -109,6 +109,3 @@ parameters:
   required: true
   description: a suffix used in conjunction with NAME to further isolate different instances of these components
   displayName: suffix
-- name: NODE_JS_IMAGE_TAG
-  value: node:12.17.0-alpine
-  description: strapi requires Nodejs LTS which is 12.x as of July 2020

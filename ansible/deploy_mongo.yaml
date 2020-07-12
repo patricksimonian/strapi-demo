@@ -16,9 +16,9 @@
       #   include_tasks: tasks/env-verify.yml
   
       - name: Clearing stateful set objects
-        include_tasks: tasks/delete_objects.yml
+        include_tasks: tasks/delete_objects.yaml
         vars:
-          LABEL: "app={{ infra_name }}-{{ suffix }}"
+          label: "app={{ infra_name }}-{{ suffix }}"
 
       - name: deploy {{ infra_name }} of PR {{ PR }} in {{ namespace }} namespace
         shell: >

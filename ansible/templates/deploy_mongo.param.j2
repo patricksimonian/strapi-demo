@@ -5,6 +5,7 @@
 -p VOLUME_CAPACITY=512Mi \
 -p SC_MONGO=netapp-file-standard \
 -p MONGODB_SERVICE_NAME={{ infra_name }} \
+-p MONGODB_SECRET_NAME={{ infra_name }} \
 -p MONGODB_REPLICAS=3 \
 -p MONGODB_IMAGE=docker-registry.default.svc:5000/openshift/mongodb \
 -p MONGODB_IMAGE_TAG=3.6 \

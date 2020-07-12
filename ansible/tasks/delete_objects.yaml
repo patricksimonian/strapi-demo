@@ -7,12 +7,12 @@
   
   - name: List objects by label
     command: >
-      oc get {{ objects }} -o={{ output_col }} -l {{ label }}
+      oc get {{ objects }} -o={{ output_col }} -l {{ label }} -n {{ namespace }}
     register: all_objects
   
   - name: List PVCs and secrets by label
     command: >
-      oc get pvc,secret,configmap -l {{ label }}
+      oc get pvc,secret,configmap -l {{ label }} -n {{ namespace }}
     register: all_pvcs
   
   - pause:
@@ -27,10 +27,10 @@
   
   - name: Clear objects by label
     command: >
-      oc delete dc,statefulset,configmap,service,route -l "{{ label }}"
+      oc delete dc,statefulset,configmap,service,route -l "{{ label }}" -n {{ namespace }}
     when: objects_delete.user_input == "y"
   
   - name: Clear PVCs and secrets by label
     command: >
-      oc delete pvc,secret,configmap -l "{{ label }}"
+      oc delete pvc,secret,configmap -l "{{ label }}" -n {{ namespace }}
     when: pvc_delete.user_input == "y"

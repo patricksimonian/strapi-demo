@@ -4,6 +4,11 @@ FROM node:12.17.0-alpine
 # set working directory
 WORKDIR /app
 
+# add `/app/node_modules/.bin` to $PATH
+# ENV PATH /app/node_modules/.bin:$PATH
+
+# add bash to the image
+# RUN apk add --no-cache bash  && apk add --no-cache curl 
 
 
 # install app dependencies
@@ -12,9 +17,8 @@ COPY package.json ./
 COPY yarn.lock ./
 # create a .cache folder and give it read and write permission
 # RUN yarn config set cache-folder ./  && yarn install --network-timeout=600000
-RUN curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo |  tee /etc/yum.repos.d/yarn.repo
-RUN yum install yarn
-# RUN yarn install --network-timeout=600000
+
+RUN yarn install --network-timeout=600000
 
 # mkdir -p /.cache && chmod 666 -R /.cache
 

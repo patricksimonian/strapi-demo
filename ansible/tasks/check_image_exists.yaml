@@ -1,7 +1,7 @@
 ---
-  - name: Fetch imagestream {{ strapi_infra_name }}:{{ version }}
+  - name: Fetch imagestream {{ infra_name }}:{{ version }}
     set_fact: 
-      imagestreamtag: "{{ lookup('k8s', kind='ImageStreamTag', namespace=tools_namespace, resource_name=strapi_infra_name + ':' + version) }}"
+      imagestreamtag: "{{ lookup('k8s', kind='ImageStreamTag', namespace=tools_namespace, resource_name=infra_name + ':' + version) }}"
   - debug: 
       msg: 
         - Image Tag {{ version }} does not exist in {{ tools_namespace }}. 

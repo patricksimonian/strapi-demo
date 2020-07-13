@@ -9,7 +9,6 @@
       image_namespace: "{{ tools_namespace }}"
       infra_name: "{{ mongo_infra_name }}"
     tasks:
-
       - name: create param file
         template:
           src: ./templates/deploy_backup.param.j2

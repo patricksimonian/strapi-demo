@@ -1,0 +1,13 @@
+---
+  - hosts: localhost
+    gather_facts: false
+    tasks:
+      - name: Checking if PR is available
+        debug: "msg= Deploying for {{ PR }}"
+        failed_when: "not PR"
+
+  - name: Deploy Mongo
+    import_playbook: deploy-mongo.yaml
+  
+  - name: Deploy Strapi
+    import_playbook: deploy-mongo.yaml

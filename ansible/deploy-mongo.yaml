@@ -11,10 +11,6 @@
       # mongo operation settings
       first_mongo_pod: "{{ mongo_infra_name }}-0"
     tasks:
-  
-      # - name: Verify environment setup and prerequisites
-      #   include_tasks: tasks/env-verify.yml
-  
       - name: Clearing stateful set objects
         include_tasks: tasks/delete_objects.yaml
         vars:
@@ -29,21 +25,20 @@
 
   
       # Check for MongoDB syncing status
-  #     - name: Add hosts for MongoDB pods
-  #       add_host:
-  #         name: "{{ ORIGINAL_SS_POD }}"
-  #         groups:
-  #         - mongo_pod
+      - name: Add hosts for MongoDB pods
+        add_host:
+          name: "{{ first_mongo_pod }}"
+          groups:
+          - mongo_pod
       
-  #     - debug: msg="------------- Switching to kubectl for pod interaction -------------"
   
-  # # Switch to mongo_pod host for pod interaction
-  # - hosts: mongo_pod
-  #   gather_facts: yes
-  #   connection: kubectl
-  #   tasks:
-  #     - name: Connect to MongoDB pod and verify ReplicaSet is synced up
-  #       include_tasks: tasks/replica_set_operation.yml
+  # Switch to mongo_pod host for pod interaction
+  - hosts: mongo_pod
+    gather_facts: yes
+    connection: kubectl
+    tasks:
+      - name: Connect to MongoDB pod and verify ReplicaSet is synced up
+        include_tasks: tasks/replica_set_is_ready.yml
   
-  #     - debug: msg="------- MongoDB ready, continue with App deployment -------"
+      - debug: msg="------- MongoDB ready, continue with App deployment -------"
   

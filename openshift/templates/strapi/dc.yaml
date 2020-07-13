@@ -10,6 +10,7 @@ objects:
         app: ${NAME}-${SUFFIX}
         pr: ${PULL_REQUEST_NUMBER}
         version: ${IMAGE_TAG}
+        group: ${NAME}
       name: ${NAME}-${SUFFIX}
     spec:
       port:
@@ -28,6 +29,7 @@ objects:
         app: ${NAME}-${SUFFIX}
         version: ${IMAGE_TAG}
         pr: ${PULL_REQUEST_NUMBER}
+        group: ${NAME}
       name: ${NAME}-${SUFFIX}
     spec:
       ports:
@@ -100,6 +102,9 @@ objects:
       generation: 2
       labels:
         app: ${NAME}-${SUFFIX}
+        group: ${NAME}
+        pr: ${PULL_REQUEST_NUMBER}
+        version: ${IMAGE_TAG}
       name: ${NAME}-${SUFFIX}
 parameters:
 - name: IMAGE_REGISTRY

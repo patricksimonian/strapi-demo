@@ -1,7 +1,6 @@
 ---
 tools_namespace: va3azs-patricksimonian-ocp201-tst-tools
 dev_namespace: va3azs-patricksimonian-ocp201-tst-dev
-# prod_namespace: va3azs-patricksimonian-ocp201-tst-prod
 github_repo: strapi-demo
 github_owner: patricksimonian
 strapi_infra_name: strapi
@@ -9,7 +8,3 @@ mongo_infra_name: mongo-ha
 mongo_backup_infra_name: mongo-ha-backup
 prod_image_tag: prod 
 test_image_tag: test
-github_environments:
-  prod: production
-  test: test
-  dev: development

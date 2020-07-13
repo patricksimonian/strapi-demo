@@ -26,14 +26,7 @@
           oc apply -n "{{ namespace }}" -f -
         vars:
           deploy_params: "{{ lookup('template', './templates/deploy_mongo.param.j2') }}"
-      # - name: Deploy MongoDB statefulset
-      #   include_tasks: tasks/create_object.yml
-      #   vars:
-      #     name: "{{ MONGODB_SERVICE_NAME }}"
-      #     kind: StatefulSet
-      #     template: templates/mongodb-manifest.yml
-      #     namespace: "{{ NAMESPACE }}"
-      #     ready_status: "{{ MONGODB_REPLICAS }}"
+
   
       # Check for MongoDB syncing status
   #     - name: Add hosts for MongoDB pods

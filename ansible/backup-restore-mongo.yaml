@@ -33,3 +33,11 @@
         register: output
         # /var/lib/mongodb/backup-restore-verify.sh will exit 0 with the following message  (below) if successful 
         failed_when: "'==== exiting ====' not in output.stdout"
+
+      - name: Delete Pod
+        k8s:
+          state: absent
+          api_version: v1
+          kind: "Pod"
+          name: "{{ mongo_backup_infra_name }}-{{ suffix }}"
+          namespace: "{{ namespace }}"

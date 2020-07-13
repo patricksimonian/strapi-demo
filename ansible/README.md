@@ -1,5 +1,17 @@
 ## Playbooks
 
+### Dependancies
+
+- ansible 2.9.10
+- python >= 2.7
+  - pip modules: kubernetes, openshift (`pip install kubernetes openshift`)
+- access to an openshift cluster
+- logged into openshift
+- access to multiple namespaces as defined the group vars file
+- oc >= 3.11
+
+Prior to starting please modify the vars example file `cp group_vars/all/vars.example.yaml group_vars/all/vars.yaml`
+
 ### Build Strapi
 Builds the Strapi Image from an open pull request. The Build is optimized to not retrigger builds of the buildconfig `git commit` matches the PR `head commit`. This is so that this script may be utilized in a ci/cd pipeline. 
 

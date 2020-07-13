@@ -22,23 +22,3 @@
           oc apply -n "{{ namespace }}" -f -
         vars:
           deploy_params: "{{ lookup('template', './templates/deploy_mongo.param.j2') }}"
-
-  
-      # Check for MongoDB syncing status
-      - name: Add hosts for MongoDB pods
-        add_host:
-          name: "{{ first_mongo_pod }}"
-          groups:
-          - mongo_pod
-      
-  
-  # Switch to mongo_pod host for pod interaction
-  - hosts: mongo_pod
-    gather_facts: yes
-    connection: kubectl
-    tasks:
-      - name: Connect to MongoDB pod and verify ReplicaSet is synced up
-        include_tasks: tasks/replica_set_is_ready.yml
-  
-      - debug: msg="------- MongoDB ready, continue with App deployment -------"
-  

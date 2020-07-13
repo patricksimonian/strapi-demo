@@ -1,6 +1,26 @@
 kind: Template
 apiVersion: v1
 objects:
+  - apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      annotations:
+        openshift.io/host.generated: "true"
+      labels:
+        app: ${NAME}-${SUFFIX}
+        pr: ${PULL_REQUEST_NUMBER}
+        version: ${IMAGE_TAG}
+      name: ${NAME}-${SUFFIX}
+    spec:
+      port:
+        targetPort: 1337-1337
+      to:
+        kind: Service
+        name: ${NAME}-${SUFFIX}
+        weight: 100
+      wildcardPolicy: None
+    status: {}
+
   - apiVersion: v1
     kind: Service
     metadata:
@@ -29,9 +49,6 @@ objects:
       revisionHistoryLimit: 10
       selector:
         app: ${NAME}-${SUFFIX}
-        deploymentconfig: ${NAME}-${SUFFIX}
-        version: ${IMAGE_TAG}
-        pr: ${PULL_REQUEST_NUMBER}
       strategy:
         activeDeadlineSeconds: 21600
         resources:
@@ -49,19 +66,17 @@ objects:
           creationTimestamp: null
           labels:
             app: ${NAME}-${SUFFIX}
-            deploymentconfig: ${NAME}-${SUFFIX}
         spec:
           containers:
-            - image: >-
-                ${IMAGE_NAMESPACE}/${IMAGE_STREAM}:${IMAGE_TAG}
+            - image: ${IMAGE_REGISTRY}/${IMAGE_NAMESPACE}/${IMAGE_STREAM}:${IMAGE_TAG}
               imagePullPolicy: IfNotPresent
               name: ${NAME}-${SUFFIX}
               env:
                 - name: DATABASE_URI
                   valueFrom:
                     secretKeyRef:
-                      name: mongodb 
-                      key: mongo-url
+                      name: ${MONGO_SECRET_NAME} 
+                      key: ${MONGO_SECRET_URL_KEY_REF}
               resources: 
                 cpu:
                   requests: ${CPU_REQUEST}
@@ -79,15 +94,6 @@ objects:
       test: false
       triggers:
         - type: ConfigChange
-        - imageChangeParams:
-            automatic: true
-            containerNames:
-              - strapi
-            from:
-              kind: ImageStreamTag
-              name: '${IMAGE_STREAM}:${IMAGE_TAG}'
-              namespace: ${IMAGE_NAMESPACE}
-          type: ImageChange
     metadata:
       annotations:
         openshift.io/generated-by: OpenShiftNewApp
@@ -96,6 +102,9 @@ objects:
         app: ${NAME}-${SUFFIX}
       name: ${NAME}-${SUFFIX}
 parameters:
+- name: IMAGE_REGISTRY
+  value: docker-registry.default.svc:5000
+  description: the image registry to find the docker image
 - name: IMAGE_NAMESPACE
   required: true
   description: the namespace to pull the image from 
@@ -108,12 +117,11 @@ parameters:
   required: true
   displayName: Image Tag 
   description: the tag for the image to deploy
-- name: DATABASE_SECRET_NAME
+- name: MONGO_SECRET_NAME
   required: true
   displayName: Database Secret Name
   description: The secret name that is uses in the valueFrom in spec.template.spec.containers.env
-  value: mongodb
-- name: DATABASE_SECRET_URL_KEY_REF
+- name: MONGO_SECRET_URL_KEY_REF
   required: true
   displayName: Database Secret Key Reference 
   description: The key that is used as the reference for the mongo url
@@ -122,7 +130,7 @@ parameters:
   required: true
   displayName: name
   description: the name for the dc and container
-  value: digital-strapi
+  value: strapi
 - name: CPU_REQUEST
   value: 50m 
 - name: MEMORY_REQUEST
@@ -140,3 +148,5 @@ parameters:
   required: false 
   description: The pull request number associated with this object
   displayName: Pull Request Number
+
+

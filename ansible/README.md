@@ -3,7 +3,7 @@
 ### Dependancies
 
 - ansible 2.9.10
-- python >= 2.7
+- Python 2.7.16
   - pip modules: kubernetes, openshift (`pip install kubernetes openshift`)
 - access to an openshift cluster
 - logged into openshift

@@ -8,4 +8,4 @@
       deploy_params: "{{ lookup('template', './templates/deploy.param.j2') }}"
   - name: Rolling Out
     shell: oc rollout latest {{ strapi_infra_name }}-{{ version }} -n {{ namespace }}
-      
+    ignore_errors: true  

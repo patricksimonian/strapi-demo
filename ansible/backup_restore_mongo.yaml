@@ -9,10 +9,13 @@
       image_namespace: "{{ tools_namespace }}"
       infra_name: "{{ mongo_infra_name }}"
     tasks:
-      - name: Backup and restore of mongo database at {{ infra_name }}-{{ suffix }}
-        shell: oc process -n "{{ namespace }}" -f "../openshift/templates/mongo/backup.yaml" {{ deploy_params }} | oc apply -n "{{ namespace }}" -f -
-        vars:
-          deploy_params: "{{ lookup('template', './templates/deploy_backup.param.j2') }}"
+      # have no clue why the heck this is failing
+      # - name: Backup and restore of mongo database at {{ infra_name }}-{{ suffix }}
+      #   shell: >
+      #     oc process -n "{{ namespace }}" -f "../openshift/templates/mongo/backup.yaml" {{ deploy_params }} | 
+      #     oc apply -n "{{ namespace }}" -f -
+      #   vars:
+      #     deploy_params: "{{ lookup('template', './templates/deploy_backup.param.j2') }}"
       - name: Wait for mongod to be ready in pod 
         k8s_info:
           api_version: v1
@@ -20,9 +23,10 @@
           name: "{{ mongo_backup_infra_name }}-{{ suffix }}"
           namespace: "{{ namespace }}"
         register: result
-        # until: (result.resources[0].status.readyReplicas is defined) and (result.resources[0].status.readyReplicas == ready_status)
-        # delay: 15
-        # retries: 20
-        # ignore_errors: True
-      - name: foo
-        shell: echo {{ result }} > foo.json
+        until: (result.resources[0].status.containerStatuses[0].ready)
+        delay: 15
+        retries: 20
+        ignore_errors: True
+
+      - name: execute backup and restore in pod {{ mongo_backup_infra_name }}-{{ suffix }}
+        shell: oc -n {{ namespace }} rsh pod/{{ mongo_backup_infra_name }}-{{ suffix }} /var/lib/mongodb/backup-restore-verify.sh

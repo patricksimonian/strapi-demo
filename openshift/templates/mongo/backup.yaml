@@ -13,9 +13,6 @@ parameters:
   - name: MONGODB_BACKUP_KEEP
     description: 'Number of backups to keep'
     value: '24'
-  - name: MONGODB_BACKUP_SCHEDULE
-    description: 'Cron-like schedule expression. Default: Every hour at :01'
-    value: '51 * * * *'
   - name: MONGODB_BACKUP_VOLUME_CLAIM
     description: 'Name of the volume claim to be used as storage'
     value: 'mongodb-backup'
@@ -31,14 +28,13 @@ parameters:
   - name: MONGODB_SERVICE_HOST
     required: true
     description: the mongo service to target and get a mongo dump from
-
 objects:
   - apiVersion: v1
     kind: ConfigMap
     metadata:
       name: ${NAME}
     data:
-      backup-restore-verify.sh: >
+      backup-restore-verify.sh: |-
         #!/bin/bash 
         function remove_old_backups () {
           echo "==== clearing old backups if available ===="
@@ -127,7 +123,7 @@ objects:
       name: ${MONGODB_BACKUP_VOLUME_CLAIM}
     spec:
       accessModes:
-      - ReadWriteOnce
+        - ReadWriteOnce
       resources:
         requests:
           storage: 1Gi

@@ -6,7 +6,7 @@ github_repo: strapi-demo
 github_owner: patricksimonian
 strapi_infra_name: strapi
 mongo_infra_name: mongo-ha
-mongo_backup_infra_name: mongo-backup
+mongo_backup_infra_name: mongo-ha-backup
 prod_image_tag: prod 
 test_image_tag: test
 github_environments:

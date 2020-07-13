@@ -6,8 +6,6 @@
     vars:
       IMAGE_TAG: '{{ version }}'
       deploy_params: "{{ lookup('template', './templates/deploy.param.j2') }}"
-  - name: Cancel existing rollout
-    shell: oc rollout cancel dc/{{ strapi_infra_name }}-{{ version }} -n {{ namespace }}
   - name: Rolling Out
     shell: oc rollout latest {{ strapi_infra_name }}-{{ version }} -n {{ namespace }}
       

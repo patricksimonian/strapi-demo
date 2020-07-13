@@ -73,7 +73,7 @@ The backup restore process is totally new to me and was indeed a big learning po
 
 `make it simple -> make it work -> make it right -> make it better`
 
-I comforatably covered up to `make it work`. My hope is to transfer the pod template into a cron job. This would require modification of the backup playbook to not delete the pod as a final task. 
+I comfortably covered up to `make it work`. My hope is to transfer the pod template into a cron job. This would require modification of the backup playbook to not delete the pod as a final task. 
 
 
 
@@ -97,8 +97,13 @@ There are two ways that I'd reduce service disruption
 2. Perform a blue-green deployment (this would be preferred)
 
 
-
-
 ## Todos
 
 - combine strapi and mongo playbooks together
+- add readiness checks to strapi
+
+## Known Issues
+
+- [#7](https://github.com/patricksimonian/strapi-demo/issues/7) unable to run deploy mongo twice without deleting stateful set
+- [#8](https://github.com/patricksimonian/strapi-demo/issues/8) build strapi fails on github api check intermittently
+- [#9](https://github.com/patricksimonian/strapi-demo/issues/9) Deploy strapi playbook fails if you run it twice quickly on the first deploy

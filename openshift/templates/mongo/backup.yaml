@@ -20,6 +20,9 @@ parameters:
   - name: MONGODB_IMAGE_TAG
     description: Name of the MongoDB tag that should be used
     value: "3.6"
+  - name: STORAGE_CLASS
+    description: the storage class for the Mongo databse
+    value: netapp-file-standard
 objects:
   - apiVersion: batch/v1beta1
     kind: CronJob
@@ -67,3 +70,20 @@ objects:
                     - name: mongodb-backup
                       mountPath: /var/data/mongodb-backup
               restartPolicy: Never
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      annotations:
+        pv.kubernetes.io/bind-completed: "yes"
+        pv.kubernetes.io/bound-by-controller: "yes"
+        volume.beta.kubernetes.io/storage-provisioner: netapp.io/trident
+      name: ${MONGODB_BACKUP_VOLUME_CLAIM}
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+      storageClassName: ${STORAGE_CLASS}
+    status: {}
+    

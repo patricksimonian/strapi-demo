@@ -5,6 +5,16 @@ This repo represents a two tier sytem that is composed of __Strapi__, a `headles
 - Strapi: 3 replica deployment config
 - Mongo: 3 replica statefulset (mongo replicaset)
 
+## Thought Process
+
+My thought process was to create infrastruce and its automation that abstracted away operational specifics away into playbooks. In addition all infrastructure was decoupled (for example openshift templates are seperate from ansible playbooks) so that all individual components could be run individually.
+
+This allows:
+
+1. devops folks to learn, interpret and run infra code as needed 
+2. CI/CD pipelines to do the same (in the case ansible is not available)
+3. Developers to do what they do best
+
 
 ## Quick Start Guide
 Check out the [ansible docs](ansible/README.md) for all available playbooks. 

@@ -9,13 +9,20 @@
       image_namespace: "{{ tools_namespace }}"
       infra_name: "{{ mongo_infra_name }}"
     tasks:
-      # have no clue why the heck this is failing
+
+      - name: create param file
+        template:
+          src: ./templates/deploy_backup.param.j2
+          dest: /tmp/deploy_backup.param
+
       - name: Backup and restore of mongo database at {{ infra_name }}-{{ suffix }}
-        shell: >
-          oc process -n "{{ namespace }}" -f "../openshift/templates/mongo/backup.yaml" {{ deploy_params }} | 
-          oc apply -n "{{ namespace }}" -f -
-        vars:
-          deploy_params: "{{ lookup('template', './templates/deploy_backup.param.j2') }}"
+        shell: "oc process -n {{ namespace }} -f ../openshift/templates/mongo/backup.yaml --param-file=/tmp/deploy_backup.param | oc apply -n {{ namespace }} -f -"
+
+      - name: delete param file
+        file:
+          state: absent
+          path: /tmp/deploy_backup.param
+
       - name: Wait for mongod to be ready in pod 
         k8s_info:
           api_version: v1

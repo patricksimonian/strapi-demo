@@ -32,5 +32,6 @@ RUN yarn install --network-timeout=600000
 # add app
 COPY . ./
 
+RUN strapi build
 # start app
 CMD ["yarn","start"]  

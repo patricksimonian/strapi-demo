@@ -35,13 +35,13 @@
     when: bc.resources|length > 0
 
     
-
   - name: Get last commit from PR {{ PR }}
     uri:
-      url: https://api.github.com/repos/bcgov/digital.gov.bc.ca/commits/refs/pull/{{ PR }}/head
+      url: https://api.github.com/repos/{{ github_owner }}/{{ github_repo }}/commits/refs/pull/{{ PR }}/head
       method: GET
     register: response
     when: bc.resources|length > 0
+    ignore_errors: true
 
   - name: Check if should build by comparing Build commit with PR Commit
     set_fact:

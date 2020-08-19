@@ -8,6 +8,8 @@
 - access to an openshift cluster
 - logged into openshift
 - access to multiple namespaces as defined the group vars file
+  - you will need to grant `system:image-puller` role to the default service account for namespaces in your tools namespace
+    ![service account](docs/service-account.png)
 - oc >= 3.11
 
 Prior to starting please modify the vars example file `cp group_vars/all/vars.example.yaml group_vars/all/vars.yaml`

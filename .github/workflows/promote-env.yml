@@ -1,0 +1,18 @@
+name: Deploy React To Dev
+on: 
+  deployment
+jobs:
+  run:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v1
+    - name: Store PR Num in env
+      uses: actions/github-script@0.3.0
+      with:
+        github-token: ${{github.token}}
+        script: |
+          const core = require('@actions/core')
+          const prNumber = context.payload.number;
+          console.log(JSON.stringify(context.payload, null, 2));
+          core.exportVariable('PULL_NUMBER', prNumber);
+    

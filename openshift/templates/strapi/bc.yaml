@@ -46,11 +46,11 @@ objects:
     postCommit: {}
     resources: 
       requests:
-        memory: 500Mi
-        cpu: 250m
+        memory: 1Gi
+        cpu: 850m
       limits:
-        memory: 850Mi
-        cpu: 500m
+        memory: 2Gi
+        cpu: 1500m
     runPolicy: Serial
     source:
       contextDir: strapi-app

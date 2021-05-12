@@ -14,7 +14,7 @@
     "eslint": "^7.4.0"
   },
   "dependencies": {
-    "strapi": "^3.0.5",
+    "strapi": "^3.2.5",
     "strapi-admin": "^3.0.5",
     "strapi-connector-mongoose": "^3.0.5",
     "strapi-plugin-content-manager": "^3.0.5",
